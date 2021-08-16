@@ -81,10 +81,10 @@ class LoginScreen extends StatelessWidget {
                                         password: passController.text,
                                       ),
                                       onFail: (e) {
-                                        scaffoldKey.currentState.showSnackBar(
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
                                           SnackBar(
-                                            content:
-                                                Text('Falha ao entrar: $e'),
+                                            content: Text("$e"),
                                             backgroundColor: Colors.red,
                                           ),
                                         );
