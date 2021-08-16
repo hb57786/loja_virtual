@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
-    return Provider(
+    return ChangeNotifierProvider(
       create: (_) => UserManager(),
       child: MaterialApp(
         title: 'Loja do Tadeu',
