@@ -18,6 +18,20 @@ class LoginScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Entrar'),
         centerTitle: true,
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacementNamed('/signup');
+            },
+            child: const Text(
+              'CRIAR CONTA',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14.0,
+              ),
+            ),
+          ),
+        ],
       ),
       body: Center(
         child: Card(

@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/models/user_manager.dart';
 import 'package:loja_virtual/screens/base/base_screen.dart';
+import 'package:loja_virtual/screens/signup/signup_screen.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -26,7 +27,19 @@ class MyApp extends StatelessWidget {
           appBarTheme: const AppBarTheme(elevation: 0),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: BaseScreen(),
+        onGenerateRoute: (settings) {
+          switch (settings.name) {
+            case '/signup':
+              return MaterialPageRoute(
+                builder: (_) => SignUpScreen(),
+              );
+            case '/base':
+            default:
+              return MaterialPageRoute(
+                builder: (_) => BaseScreen(),
+              );
+          }
+        },
       ),
     );
   }
