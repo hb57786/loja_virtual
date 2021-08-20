@@ -98,7 +98,8 @@ class LoginScreen extends StatelessWidget {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
-                                            content: Text("$e"),
+                                            content:
+                                                Text('Falaha ao Entrar: $e'),
                                             backgroundColor: Colors.red,
                                           ),
                                         );

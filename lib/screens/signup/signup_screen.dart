@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/helpers/validators.dart';
 import 'package:loja_virtual/models/user.dart';
+import 'package:loja_virtual/models/user_manager.dart';
+import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatelessWidget {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -51,6 +53,8 @@ class SignUpScreen extends StatelessWidget {
                 const SizedBox(height: 16.0),
                 TextFormField(
                   decoration: const InputDecoration(hintText: 'Senha'),
+                  autocorrect: false,
+                  obscureText: true,
                   validator: (pass) {
                     if (pass.isEmpty)
                       return 'Campo Obrigatório';
@@ -62,6 +66,8 @@ class SignUpScreen extends StatelessWidget {
                 const SizedBox(height: 16.0),
                 TextFormField(
                   decoration: const InputDecoration(hintText: 'Repita a Senha'),
+                  autocorrect: false,
+                  obscureText: true,
                   validator: (pass) {
                     if (pass.isEmpty)
                       return 'Campo Obrigatório';
@@ -87,6 +93,21 @@ class SignUpScreen extends StatelessWidget {
                           );
                           return;
                         }
+                        context.read<UserManager>().signUp(
+                              user: user,
+                              onSuccess: () {
+                                debugPrint('sucesso');
+                                // TODO: POP
+                              },
+                              onFail: (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Falha ao Cadastrar: $e'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              },
+                            );
                       }
                     },
                     style: ButtonStyle(
