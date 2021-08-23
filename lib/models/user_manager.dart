@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:loja_virtual/helpers/firebase_errors.dart';
@@ -9,7 +10,8 @@ class UserManager extends ChangeNotifier {
   }
 
   final FirebaseAuth auth = FirebaseAuth.instance;
-  User user;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  UserData user;
 
   bool _loading = false;
   bool get loading => _loading;
@@ -20,7 +22,8 @@ class UserManager extends ChangeNotifier {
     try {
       final UserCredential result = await auth.signInWithEmailAndPassword(
           email: user.email, password: user.password);
-      this.user = result.user;
+      await _loadCurrentUser(firebaseUser: result.user);
+
       onSuccess();
     } on FirebaseAuthException catch (e) {
       onFail(getErrorString(e.code));
@@ -36,6 +39,7 @@ class UserManager extends ChangeNotifier {
           email: user.email, password: user.password);
 
       user.id = result.user.uid;
+      this.user = user;
 
       await user.saveData();
 
@@ -51,12 +55,17 @@ class UserManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _loadCurrentUser() async {
-    final User currentUser = auth.currentUser;
+  Future<void> _loadCurrentUser({User firebaseUser}) async {
+    final User currentUser = firebaseUser ?? auth.currentUser;
     if (currentUser != null) {
-      user = currentUser;
-      print(user.uid);
+      final DocumentSnapshot docUser = await firestore
+          .collection('users')
+          .doc(currentUser.uid)
+          .get(); //busca os dados do usuário logado no momento
+      user = UserData.fromDocument(docUser);
+
+      print(user.name);
+      notifyListeners();
     }
-    notifyListeners();
   }
 }
